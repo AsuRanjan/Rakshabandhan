@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Raksha Bandhan!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@700&family=Inter:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Custom styles and animations */
+        @keyframes animated-gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            /* Hide horizontal scrollbars */
+        }
+
+        .font-dancing {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .font-playfair {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .card {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            perspective: 1000px;
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .card-inner {
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-inner {
+            transform: rotateY(5deg) rotateX(5deg) scale(1.05);
+        }
+
+        /* New Modal Style */
+        .message-modal {
+            background-color: #fff;
+            border: 2px solid #fbcfe8;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        #modal-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        #modal-message {
+            position: relative;
+            z-index: 2;
+        }
+
+        #intro-screen {
+            transition: opacity 1s ease-in-out;
+        }
+
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .text-shadow-md {
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        /* NEW CSS FOR BACKGROUND IMAGE AND BLUR OVERLAY */
+        #main-content {
+            background-image: url('https://lh3.googleusercontent.com/fife/ALs6j_Fs8PQUlRpFO2VKYuEyBd8auK2zvtiqlcC-TQj8snkXfwFy4fjJ0Z82-zXqCDe-gf7V_CIP56BVp-QM9CALvaQCBKG_WLJSiGhRQ1BjuP1JIWHDK8tWRk88vpomh4BN9j3CeAotfCONSJtvI5Xb1NWRR9-fN_H4_WPIL2K_uBDACprFEufRkCsaW0vP3o74P8jSiIhKukgUr41YnabopNg5khoCd8AtoAnTIuMhpwIvrzGU4MvOvwNim9Glp6v0NUusitxSAd-FkHoToZNFe22-SRPdAQwVoS3YkMbstBymTlirG5cJ7wGEIqxxwQpaIj68pW9OAveg5-TfqO862eVaQCriy6koJU6iOzuBD19ndzcOEGCg-hKWSftH26z6U1aFdDJTzPsXmt9B7wqB1toGXvQBXTLetHCQGmPfa6FM5PddJvdQrNXaT2wh4BY6FxrOH2tQ1ifSWjpE6hCdbG79C8dfQR_BCx1slYJWoILs5S8as5xSjE6CZZGuXMwMBJedR0AgW6e25xGBow3oyfkS4zmDLUJCH6daFa0ZYfe-0tjrDRXRhp2XvNhoDYLyA25t9FEjr9s3nNPsKbQeuisEaWeavbJ5wsSyBI9V6MrsZyn-1P8nikxhUvcZMpE3U6HrQxB-2xD5rckcpKuwleIXOUrQxFZoEPt5KtLpS-Ztr4gerogEHcwDUfhAbxhRPxF3mKl5wEwztfTiPzCrBP-E1OApfWJBgFocxHVDNzAmOU1kioPRdAxxwh_Lv1zzCXqOyvgYq3zRfeJwoh5NqB6_p6C7XP6MeW0lhfSYrfvVSZ02-Gh8oiKbA92lvoZ9kuTykESkbeid9eu6M7SSRautWREuQ0uyiRrmHpGJqCQLwwsyrUd0PaOuE2AE6p9W8tCm2HGxuJPvpTmY5E4cNKoZeMjBLnCHIeTEA5oEz9kVSyTB_-Ue_wzqk_ghuwt2AEBQXgtgV_ZDRfdZV8S5e2lbnPSC56Q4Ig0hbSMkx3itcQQfcVQ9nHwcYl-nyahWb6Fq2BzJsfBa6SL3eIW8l0SUVGooLXU65i6Kg5dcHgbCwKlPtpoKGXEasekfCgAwDfkHVX8DDGnhUTEQdDHPn4_2mN-LWGshugKbEDzSMxHXbCvPmUSbHoBwh6Jig7QLa2p6-fkRB4Bv9oyHoGOtfQgIsrMn53LANZta7mADhTmnYCM4rqE9X7W9D7m6HXGkdJy_7Nsk9YquSV8oNJNtIL3IcLx4VaT3MIhaYbWNnA_q28g1hSjS3Xv0_a__T4TJzE90W16K9ZPUiYYwAI9LQ8tjek2oPFKYkB7dh9wp3k4HabviglxNgGE8in_eIE1n-JhmGOQ24BJTSy0x6GkXxCkWJgs6end0i0I07WjcJq3uucjMhf3TP566TDOaALCoagBjDzL4xxkY6IGbDxJkF0Qch8m6dXVOR5cCfk9eGSrTS41ppCeNDY5jchgm1pBTdBkFr06qsog-M18kGpiWfU1fZku6ygX2JhxbvpPe-tr_t1gAiNZIBKk9nCIiLlV-I8P-fB_snKpjKXLlASeN4hHj1KlJIo2_fRHgTOMYA9Ln-_PFaGbvRTKihlYSdX1OpyjijOs7_l87laFun2k44kiSlKQSF597IDfRew=s320-w320-h200-p-k-nu');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            z-index: 0;
+            background-attachment: fixed;
+            /* Keep the background fixed during scroll */
+        }
+
+        #main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800">
+
+    <div id="intro-screen" class="fixed inset-0 z-[100000] overflow-hidden bg-black">
+        <video id="rakhi-video"
+            class="absolute top-1/2 left-1/2 min-w-full min-h-full w-auto h-auto -translate-x-1/2 -translate-y-1/2 object-cover z-0 opacity-0 transition-opacity duration-1000"
+            loop playsinline>
+            <source
+                src="Happy Raksha Bandhan 2023 __ Motion Graphic Video of Rakshabandhan __ After effect animation.mp4"
+                type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <canvas id="background-animation-canvas" class="absolute inset-0 z-10"></canvas>
+        <div id="dark-overlay" class="absolute inset-0 bg-black bg-opacity-30 z-20 transition-opacity duration-1000">
+        </div>
+        <div id="intro-content-overlay"
+            class="relative z-30 flex flex-col items-center justify-center h-full text-white p-4 transition-opacity duration-500">
+            <h1 class="text-4xl md:text-7xl font-bold font-dancing mb-4 text-shadow">Pyaar ka Bandhan</h1>
+            <p class="text-lg md:text-xl mb-8 max-w-lg mx-auto text-center text-shadow-md">Ek dhaaga jo bhai-behen ke
+                atoot rishte ko aur bhi mazboot banata hai. Is tyohaar ko hamare saath manayein.</p>
+            <button id="click-me-btn"
+                class="bg-pink-500 text-white font-bold py-3 px-8 rounded-full text-xl hover:bg-pink-600 transition-all duration-300 glow-button">
+                Click Me
+            </button>
+        </div>
+    </div>
+
+    <main id="main-content" class="hidden min-h-screen w-full flex flex-col items-center justify-center p-4 md:p-8">
+        <div class="text-center mb-8 md:mb-12">
+            <h1 class="text-5xl md:text-7xl font-bold text-white font-playfair text-shadow">Happy Raksha Bandhan</h1>
+            <p class="text-lg md:text-xl text-white mt-2 text-shadow-md">A celebration of the purest bond of love.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+            <div id="card-1" class="card">
+                <div class="card-inner bg-white rounded-2xl shadow-xl overflow-hidden">
+                    <img src="https://mahavasturemedies.com/cdn/shop/articles/Rakshabandhan_4.png?v=1738819405&width=1000"
+                        onerror="this.onerror=null;this.src='sister brother.png';"
+                        alt="Bhai aur Behen Raksha Bandhan manate hue" class="w-full h-64 object-cover">
+                    <div class="p-6 text-center">
+                        <button
+                            class="reveal-btn bg-pink-500 text-white font-bold py-3 px-6 rounded-full hover:bg-pink-600 transition-all duration-300"
+                            data-message="Through childhood giggles and grown-up trials, we stand by each other; our love is the safest place, a treasure no time or tide can ever wash away.">
+                            Reveal Message
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="card-2" class="card">
+                <div class="card-inner bg-white rounded-2xl shadow-xl overflow-hidden">
+                    <img src="https://lh3.googleusercontent.com/fife/ALs6j_HVH-pDrmV6U6I0D6nKLoJm9AprVF5eMU4wOHb4WEpDOteM296ZZz0jX_qU5MWsfgYFJq43Xqf1sodrXzlpD3vntrEcU9Npu5c7oB9uCgtFsZtEpHX9y1l8FtpTlFgdWohUTc9zrqEH_K-ALlEPky9osaj1HT9RZkNVKRzkTJrobSyGut5zm3MVEhPfCIqedYHqAr2fyaEbGypwz-thwjtEQEchJ8a_LTngnAHm2Uw8cCMdIQhu4PrdHTWYNtAG5xJvh0xwYBIwQqxhyvohMIxpSfByQmDazSlQmH1cat6rfi62_g-Mz68Q2LIvdcOjcCG3DlkDHy2TM2pXU1o0pYBOdjYGfDKA_ZSEy3rIfmBRbfTyEY82dhNriTBDKYFfjEHuQHzqCk5WZWKpWbDNi50LRUtt_RPGqNYB771SdE5uGM4WCvJ7aCRFdzGvHs_NMevxLzAcvwLFeiMJrSk7TR6nZlujQrbGWcozuBFtr5rRrFhAib5qWbtvagCMiid0qVyU-HfkVdO6iKddmQJ9mUVEAIxoIYpc9htoS3REzH5YwhIf9zHiziJ1hu5wuzjy-Fyq1W-8mcqMg0SNKz1FoGZOYByezeliFljK6mibGWcwH6fanpTE0ff6zuTpQBIpGuLhhZvjPPQTUui3yJVQ8LJGEEEjSucxVXU8palMvBAzefLJRXKRWn0y6ueBHA3geyVXmFoiOpqDcl9llBq80JbF8W1k7YrZoMk2d334pw3wvEq1ARRXLhl9lx8iXwYGvZOcE08h8dIl2qKteRak12yas8uZ832t6a-PCGU9Rb9IpKRWOEPnZRg-cdEJcaAEDUJPl8xwn6CqfAY-Dbk_miUrCT8-rVLZ6veM6zU-sAWsp20XNS0ucyUFbXNklAQOTYWm6vXxRRCeQgDOUYDFJytcF79uRUO1OmhnWN2zFHg2eIp_0BRMO5xpD6r15rxh-FHlAYp9r4hY36xxJKXHEsKtSfM6zs8S23-NnMur4gnaQtRuxU8AHl095bbrIvwLJJd6G5OqGRlrw9EcdFOb_FYxqccTqsrUhUK_FOFFqoQw8QsjSE3pJp5Xl6pL1sYtqwIcI5NrB6DoYBAvOUCjkMzZe77Ftl2Vbs9NzpaYOEBpPZNt6HK9SED9_TsvvnFvNf2bUACGu5SwYJfzWvWsdAiOud7QszwITqhsjCNgqVODL60tQTPZ1boFkif0T41ICHttYwc3VxBXMFAB3PZ_NBfwqnTpMrtEg2CKj-bjXxEqzYhaK2VKvk8TyY29bkkIPnYhqy9H6y_x1WZdFvV-zb0dvqXS3hk0sSD2xMxQGhlnFdrUrrPZMFIqxr_1DpTtU01yppEeSfTrPJ1KvE_BoZKGvPcdX-j-sW30xZouTU6pZBIwL-DrRE66pGLf2c6c9KkA9W7Z2yYv1TPaJzwievHu443L8fwGuITydjJQJuZajXV_9yuwJpDK-HV4jRbKkEcQw3tsiyLywN5P9xhalpJzLVnTpH9WJtvITMS11LW1UceIYfyw6tpKyJo1Z3OtsLzzRPe-xefTyPTAfh6H72WQQpvZkme2teZcG9T5qiGs_41y4AFheqIytTepSRCd4vq-DjazpM749l7IKSr2RL4PH3-SAGdMH3rhng=s320-w320-h200-p-k-nu"
+                        onerror="this.onerror=null;this.src='Traditional thali.webp';"
+                        alt="Sundar Rakhi ki thali" class="w-full h-64 object-cover">
+                    <div class="p-6 text-center">
+                        <button
+                            class="reveal-btn bg-purple-500 text-white font-bold py-3 px-6 rounded-full hover:bg-purple-600 transition-all duration-300"
+                            data-message="May the thread of Rakhi always keep our bond strong and our hearts connected, no matter where we are. Wishing you a joyous celebration!">
+                            Reveal Message
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="card-3" class="card">
+                <div class="card-inner bg-white rounded-2xl shadow-xl overflow-hidden">
+                    <img src="https://lh3.googleusercontent.com/fife/ALs6j_HTwyT24pYwXzkDRJwSmKa0mtIb_V64W9T0d_6z7ICVJuWuh30Xk0H2vcV5APfQxIuqqmE85zbqOVTPCC1pq0FxEaDn949meFzljIWqpKuJGy85tsQq4k7Br_qmioM2Cs0TZaHjwW1sdwgte3y7Ryn19beA0zoTfHdlDx1w_kdApgyOwGjEiWsCpgRfTssVM9fbe6_9pfA8kGzQJ7oJ8UFfn2Mr3GbIIQpP1wqRDqSFLPptnn2VZqQMK3tcMBz7Getu5BgAWYyLmXgRm4imGPtGbLj7I92-nP5U5e5ea8bwLr43SJEKwVBducP97OkcoarXGSd8YE10DhXZPVmHk0fY1tu0dPYc35q8BfMbtXWWRTSTeb8_Z-ARECVsctvnC8fnDvDBMlgCrvF8oPv5LBMfjcPGIc9iM4Wqa7oq_-pJ-wtscXtauLmqdWyD9Oq8e5SPnM2wLYQ9fPa0JzbS6wKtSp8OockROkPaAvqOK-KQAvg1cf4G7QOv0kZE8HMcipi2MYaqmKFjJ_zUlZAPl4O-qudiZOzQCSoe6iRyEIxKu2XbNGWvcI3BvtL5x7jAXTOzd2I4KmKKO6nPCiobkmYtJp3bnHuQjsNIiHa9auiA8RdTpdQ0jg3nxVCcmymmQBkuhZx9AsmS1F9OdmsiwiHHhaELF7hmGAAvFhHedAxWBXXWpRIa-pb3yElGGNSQlhB13_YPIMxMTSAQVgpRt60bbCYkPzPjswpMyZosgKcuRjULTJEooRy5OZdkF6vpZaPFzX_pvsNJEfK5OYUMXYMg36ntfgpSS8ZOZhnwHWwpSyLtiKRd9zmEb4LMG2KuFX_fgu2yzU7al_HxeRCJIlAvJTLa5HV8TUt20GosgojZ6k8tCcXHXo6kORBBbCJMDBOFwu6SVLKAfOWIKdHa6lEsabbMxHDk-FqJpSeXgS6nzzoxSv7pXai4yibvSA5sFpuWSWbOm4IrSuqumaX7ZVaPLgWxn8IapgT82NiZ2EDWXF3M0P9Yp_bgJfISd1G2QGc1kMKVlDesJSK5cYQkn81NE3Ug2QslKCj7agopezO-Wfsk6g5EAHsRvyzI_WLLsKy6m5ePelhlQk2Y1xbR4rGHDOC6DrkhhmrS1YQoigviosEAUB2VDiBmokkX1SyLbmBG7xk8EfO13CFHbt9VC3NE6-pva5R_XVbSfCEXBfWJ-cfKukevNAJ80p9vWC970y427q5fWMdk2kO7r2yNQ1l5BekiCcb6rH2d0QXewlatwc_tv5ra_LJ40_x_4bmB0HOSgzo5suuC7Cm0rTm5lgk0YQmdfSjmVQN1HGsnnDxSubhXrgrT4n0fAMB24n5fpzsbVhcmPk7Kntu5R4jDNzCuP9GmPu7RnN6MnCdNdSIWgraSK8aootJpVzk7CjrS-aMJzGD_YTSpYp2l65b6ek6Q9Dh-d9ianHN0PvyW5Zj4Yhzx0BMe5qADhIPqZ4Y1aEakdcB-9TypSOZPzYu5NrpuaCgrmY3cUC625Uqyh_RFP_ft8woRTzVf7FOrdfkYjR-G2OD2AKrqRG5Sowwd5PkBoL9v2BJaY-bJJBMPylXvANsmIoEVKWvqCdSop9Gn9nlbcZxghiZG8XHTNyZaZW9jOf_6iVc4s7lZJQ=s320-w320-h200-p-k-nu"
+                        onerror="this.onerror=null;this.src='gift.webp';"
+                        alt="Ek khaas tohfa" class="w-full h-64 object-cover">
+                    <div class="p-6 text-center">
+                        <button
+                            class="reveal-btn bg-orange-400 text-white font-bold py-3 px-6 rounded-full hover:bg-orange-500 transition-all duration-300"
+                            data-message="You are the most precious gift in my life. On this auspicious day, I wish you all the happiness and success in the world. Happy Rakhi!">
+                            Reveal Message
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="message-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black bg-opacity-60" id="modal-backdrop"></div>
+        <div
+            class="message-modal rounded-2xl w-full max-w-md mx-auto p-8 text-center relative transform scale-95 transition-transform duration-300">
+            <canvas id="modal-canvas"></canvas>
+            <p id="modal-message" class="font-dancing text-4xl text-rose-800"></p>
+            <button id="close-modal-btn" class="absolute top-3 right-3 text-gray-700 hover:text-black z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // All element selections
+            const introScreen = document.getElementById('intro-screen');
+            const clickMeBtn = document.getElementById('click-me-btn');
+            const mainContent = document.getElementById('main-content');
+            const introContentOverlay = document.getElementById('intro-content-overlay');
+            const rakhiVideo = document.getElementById('rakhi-video');
+            const darkOverlay = document.getElementById('dark-overlay');
+
+            const bgCanvas = document.getElementById('background-animation-canvas');
+            const bgCtx = bgCanvas.getContext('2d');
+            let bgParticlesArray = [];
+
+            const modal = document.getElementById('message-modal');
+            const modalMessage = document.getElementById('modal-message');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const revealBtns = document.querySelectorAll('.reveal-btn');
+
+            // Modal Canvas
+            const modalCanvas = document.getElementById('modal-canvas');
+            const modalCtx = modalCanvas.getContext('2d');
+            let modalParticlesArray = [];
+            let modalAnimationId;
+
+            // --- Background Animation ---
+            function setupCanvas(canvas, context, particleArray, particleClass, count) {
+                canvas.width = canvas.parentElement.offsetWidth;
+                canvas.height = canvas.parentElement.offsetHeight;
+                particleArray.length = 0; // Clear existing particles
+                for (let i = 0; i < count; i++) {
+                    particleArray.push(new particleClass(canvas));
+                }
+            }
+
+            class BgParticle {
+                constructor(canvas) {
+                    this.canvas = canvas;
+                    this.x = Math.random() * this.canvas.width;
+                    this.y = Math.random() * this.canvas.height;
+                    this.size = Math.random() * 5 + 1;
+                    this.speedX = Math.random() * 2 - 1;
+                    this.speedY = Math.random() * 2 - 1;
+                    this.color = `rgba(255, 215, 0, ${Math.random() * 0.5 + 0.3})`;
+                    this.isRakhi = Math.random() > 0.9;
+                    if (this.isRakhi) {
+                        this.color = `rgba(225, 29, 72, ${Math.random() * 0.6 + 0.4})`;
+                        this.size = Math.random() * 8 + 4;
+                    }
+                }
+                update() {
+                    if (this.x > this.canvas.width || this.x < 0) this.speedX = -this.speedX;
+                    if (this.y > this.canvas.height || this.y < 0) this.speedY = -this.speedY;
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+                }
+                draw(context) {
+                    context.fillStyle = this.color;
+                    context.beginPath();
+                    context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    context.fill();
+                }
+            }
+
+            function animate(canvas, context, particleArray) {
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particleArray.length; i++) {
+                    particleArray[i].update();
+                    particleArray[i].draw(context);
+                }
+                return requestAnimationFrame(() => animate(canvas, context, particleArray));
+            }
+
+            setupCanvas(bgCanvas, bgCtx, bgParticlesArray, BgParticle, 50);
+            animate(bgCanvas, bgCtx, bgParticlesArray);
+            window.addEventListener('resize', () => setupCanvas(bgCanvas, bgCtx, bgParticlesArray, BgParticle, 50));
+
+            // --- Modal Animation ---
+            class ModalParticle extends BgParticle {
+                constructor(canvas) {
+                    super(canvas);
+                    this.color = `rgba(252, 211, 77, ${Math.random() * 0.7 + 0.2})`; // Brighter gold
+                    this.size = Math.random() * 3 + 1;
+                    this.speedY = Math.random() * -1.5 - 0.5; // Move upwards
+                }
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+                    if (this.y < 0) {
+                        this.y = this.canvas.height;
+                        this.x = Math.random() * this.canvas.width;
+                    }
+                }
+            }
+
+            function startModalAnimation() {
+                setupCanvas(modalCanvas, modalCtx, modalParticlesArray, ModalParticle, 70);
+                const animateLoop = () => {
+                    modalCtx.clearRect(0, 0, modalCanvas.width, modalCanvas.height);
+                    modalParticlesArray.forEach(p => {
+                        p.update();
+                        p.draw(modalCtx);
+                    });
+                    modalAnimationId = requestAnimationFrame(animateLoop);
+                };
+                animateLoop();
+            }
+            function stopModalAnimation() {
+                cancelAnimationFrame(modalAnimationId);
+            }
+            // --- Main Logic ---
+            function startExperience() {
+                rakhiVideo.classList.remove('opacity-0');
+                rakhiVideo.play();
+                introContentOverlay.style.opacity = '0';
+                darkOverlay.style.opacity = '0.1';
+                setTimeout(() => { introContentOverlay.style.display = 'none'; }, 500);
+                setTimeout(() => {
+                    introScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        introScreen.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                        mainContent.classList.remove('hidden');
+                        const cards = document.querySelectorAll('.card');
+                        cards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.classList.add('visible');
+                            }, index * 300);
+                        });
+                    }, 1000);
+                }, 6000);
+            }
+            // --- Modal Logic ---
+            function showModal(message) {
+                modalMessage.textContent = message;
+                modal.classList.remove('hidden');
+                startModalAnimation();
+                setTimeout(() => {
+                    modal.querySelector('div.message-modal').classList.add('scale-100');
+                }, 10);
+            }
+            function hideModal() {
+                stopModalAnimation();
+                modal.querySelector('div.message-modal').classList.remove('scale-100');
+                setTimeout(() => { modal.classList.add('hidden'); }, 300);
+            }
+
+            revealBtns.forEach(btn => btn.addEventListener('click', () => showModal(btn.dataset.message)));
+            closeModalBtn.addEventListener('click', hideModal);
+            modalBackdrop.addEventListener('click', hideModal);
+            clickMeBtn.addEventListener('click', startExperience, { once: true });
+        });
+    </script>
+</body>
+
+</html>
